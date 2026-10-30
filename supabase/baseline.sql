@@ -67950,3 +67950,10 @@ update public.agent_inbox_items as aviso
 create unique index if not exists inbox_task_reminder_ocasiao_unique
   on public.agent_inbox_items (organization_id, ref_id, kind, para_user_id, task_reminder_due_at)
   where ref_kind = 'task' and task_reminder_due_at is not null and status <> 'resolved';
+
+-- ---- skill ativada pela etiqueta: trigger 'tag' (migration 0794) ----
+alter table skill_activations
+  drop constraint if exists skill_activations_trigger_check;
+
+alter table skill_activations
+  add constraint skill_activations_trigger_check check (trigger in ('hard', 'probe', 'tag'));
